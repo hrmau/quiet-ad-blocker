@@ -23,10 +23,10 @@ A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project b
 
 ## How it works
 - **Network blocking**: weekly (and on install) the background downloads EasyList, EasyPrivacy, uBO Privacy, uBO Badware and StevenBlack hosts, converts the network rules DNR can express, and installs ~14k dynamic rules atomically. `||domain^` rules are grouped 1,000 per rule via `requestDomains`. Cosmetic rules, scriptlets, `$redirect`, `$removeparam` and regex rules are skipped. If Chrome rejects a rule it names the id; we drop it and retry. On fetch failure we keep the old rules and retry in an hour. The bundled hosts-only ruleset `ads` is a fallback, disabled once dynamic rules exist (re-checked on update/startup because ruleset state resets).
-- **Rule ID ranges** (static and dynamic): `< 50000` block, `>= 50000` allow, `100000` = the single paused-sites `allowAllRequests` rule. Only ids below 50000 are counted as blocks.
+- **Rule ID ranges** (static and dynamic): `< 50000` block, `>= 50000` allow, `100000` = the single paused-sites `allowAllRequests` rule.
 - **Content scripts** are registered at runtime with `chrome.scripting` (not in the manifest) so paused sites can be excluded via `excludeMatches`.
 - **Pause per site**: one dynamic allow rule with all paused domains + content scripts re-registered. Popup reloads the tab.
-- **Stats**: `onRuleMatchedDebug` (unpacked only - a Web Store build would lose per-domain stats). Buffered in memory, flushed every 750ms through a single serial queue. Per-page in `storage.session` (reset on top-frame navigation), totals in `storage.local`.
+- **Stats**: `webRequest.onErrorOccurred` with `net::ERR_BLOCKED_BY_CLIENT` (observe-only, works packed - `onRuleMatchedDebug` and the `declarativeNetRequestFeedback` permission are gone). Counts any extension's blocks, so another blocker alongside inflates them. Buffered in memory, flushed every 750ms through a single serial queue. Per-page in `storage.session` (reset on top-frame navigation), totals in `storage.local`.
 - **Milestones**: checked after each flush and after pausing. New ones go into `unseen`, the toolbar icon switches to the dot variant, the popup shows them once then sends `seen`. No notifications - deliberate, notification permissions look dodgy.
 
 ## YouTube - lessons learned
@@ -45,6 +45,7 @@ YouTube detects blockers and shows the "Ad blockers are not allowed" dialog. Wha
 - Icon: a closed eye, sage, transparent background. 16/32px use the bolder variant.
 
 ## Known unknowns
+- Brave Shields blocks before extensions see the request: Shields-blocked requests fire neither DNR matches nor webRequest errors (checked in headless Brave 1.96, Oct 2026). Testing Quiet's own blocking in Brave needs a URL Shields ignores, e.g. a temporary dynamic rule.
 - The popup has only been rendered here with a mocked `chrome` API (fake data, no favicon). Ask for a real screenshot after UI changes. README screenshots live in `docs/`.
 - The rule validator in `tests/` is a best-effort copy of Chrome's; real validation may be stricter.
 - Dynamic rule storage size limits beyond the 30,000 rule count haven't been checked.

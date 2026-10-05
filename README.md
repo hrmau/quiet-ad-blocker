@@ -43,7 +43,7 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ## Installing
 
-Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review, a developer account and a version that counts without developer mode are all on the list. Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
+Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review and a developer account are all that's left on the list. Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
 
 1. **[Download quiet.zip](https://github.com/hrmau/quiet-ad-blocker/releases/latest/download/quiet.zip)** from the latest release.
 2. Unzip it somewhere it can live permanently, like your Documents folder. Not Downloads - you'll tidy that one day and take Quiet with it.
@@ -91,7 +91,7 @@ To hear about new versions, choose **Watch → Custom → Releases** at the top 
 
 - **Cosmetic filters from the big lists.** uBlock Origin hides thousands of site-specific elements; Quiet hides a handful of generic ones. Some empty boxes will remain where ads used to be. Sit with them.
 - **Every network rule.** Browser-native blocking can't express everything uBlock Origin can (regex rules, redirects, scriptlets, parameter stripping). Those are skipped. Quiet blocks most things, not all things.
-- **Counting outside developer mode.** The per-site counts rely on an API that browsers only allow for unpacked extensions. The Web Store version will need to count differently, which is the main thing standing between Quiet and the store.
+- **Counting other people's work.** Quiet counts every request a blocker cancelled. Run another ad blocker alongside it and those blocks are counted too, with Quiet quietly taking the credit. In Brave it's the reverse: Shields blocks many ads before Quiet ever sees them, so the count is lower than what's really being blocked. Both are doing their job. Only one is counting.
 - **Promises about YouTube.** It works until it doesn't. Then it gets fixed. Then it doesn't.
 
 If you need the full strength version, use [uBlock Origin](https://github.com/gorhill/uBlock) or uBlock Origin Lite. They're excellent. They're just not this sarcastic.

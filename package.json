@@ -1,0 +1,6 @@
+{
+  "name": "quiet",
+  "private": true,
+  "type": "module",
+  "scripts": { "build-rules": "node scripts/build-rules.mjs" }
+}

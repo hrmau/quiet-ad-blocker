@@ -1,0 +1,2 @@
+# One domain per line. Domains (and their subdomains) here are never blocked.
+# Rebuild after editing: node scripts/build-rules.mjs

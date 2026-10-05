@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="site">
+    <img id="favicon" alt="" width="14" height="14">
+    <span id="host"></span>
+    <button id="pause" class="pause" type="button" hidden></button>
+  </header>
+
+  <section id="unlocked" class="unlocked" aria-live="polite"></section>
+
+  <section class="hero" aria-live="polite">
+    <div class="breath" aria-hidden="true"></div>
+    <p id="count" class="count">0</p>
+    <p class="count-label">blocked on this page</p>
+  </section>
+
+  <p id="quip" class="quip"></p>
+
+  <section id="released" class="released" hidden>
+    <h2>Let go of</h2>
+    <ul id="list"></ul>
+    <p id="more" class="muted" hidden></p>
+  </section>
+
+  <footer class="total">
+    <p><span id="total" class="total-n">0</span> blocked since <span id="since"></span></p>
+    <p id="total-yt" class="muted" hidden></p>
+    <details id="milestones" class="milestones">
+      <summary id="milestones-label"></summary>
+      <ul id="milestone-list"></ul>
+    </details>
+    <p id="lists" class="fine" hidden></p>
+  </footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

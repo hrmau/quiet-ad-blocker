@@ -1,0 +1,142 @@
+:root {
+  --base: #e6ebe7;    /* pale sage stone */
+  --ink: #2c3833;
+  --muted: #74817a;
+  --rule: #cbd5ce;
+  --sage: #5f8572;
+  --mist: rgb(95 133 114 / 0.14);
+  --serif: "Iowan Old Style", "Charter", "Palatino Linotype", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --base: #1b201e;
+    --ink: #dbe3de;
+    --muted: #8b968f;
+    --rule: #2e3632;
+    --sage: #8fb3a1;
+    --mist: rgb(143 179 161 / 0.12);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 300px;
+  background: var(--base);
+  color: var(--ink);
+  font: 13px/1.5 var(--sans);
+  padding: 14px 20px 16px;
+}
+
+.site { display: flex; align-items: center; gap: 7px; color: var(--muted); overflow: hidden; }
+#host { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.pause {
+  flex: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--sage);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+.pause:hover { border-color: var(--sage); }
+.pause:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+.pause:disabled { opacity: 0.5; cursor: default; }
+body.is-paused .breath { animation: none; opacity: 0.4; }
+
+/* The one moving thing: a slow breathing circle behind the count (about six breaths a minute). */
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 140px;
+  margin-top: 4px;
+  text-align: center;
+}
+.breath {
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: var(--mist);
+  box-shadow: 0 0 0 1px var(--mist);
+  animation: breathe 10s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(0.86); opacity: 0.7; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .breath { animation: none; } }
+
+.count {
+  position: relative;
+  align-self: end;
+  font: 400 44px/1 var(--serif);
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--sage);
+}
+.count-label { position: relative; align-self: start; margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+.quip {
+  margin: 6px 0 0;
+  text-align: center;
+  font: italic 14px/1.45 var(--serif);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.released { margin-top: 20px; }
+.released h2 { font: inherit; color: var(--muted); margin-bottom: 4px; }
+#list { list-style: none; }
+#list li { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0; }
+#list .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#list .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--muted); }
+#more { margin-top: 2px; }
+
+.total { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.total-n { color: var(--sage); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.fine { margin-top: 6px; font-size: 11px; color: var(--muted); }
+
+/* Achievements: shown once in the popup, never as a notification. */
+.unlocked:empty { display: none; }
+.unlocked { margin-top: 12px; display: grid; gap: 8px; }
+.ach {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--sage);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ach img { flex: none; margin-top: 2px; }
+.ach-body { flex: 1; min-width: 0; }
+.ach-eyebrow { font-size: 11px; color: var(--muted); }
+.ach-title { font-weight: 600; }
+.ach-quip { font: italic 13px/1.4 var(--serif); }
+.ach-close {
+  flex: none;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+}
+.ach-close:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+
+.milestones { margin-top: 8px; }
+.milestones summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.milestones summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+#milestone-list { list-style: none; margin-top: 6px; display: grid; gap: 6px; }
+#milestone-list .done .t { font-weight: 600; }
+#milestone-list .q { font: italic 12px/1.4 var(--serif); color: var(--muted); }
+#milestone-list .todo { color: var(--muted); }

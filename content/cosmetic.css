@@ -1,0 +1,14 @@
+/* Generic ad containers. Kept conservative - broad selectors like .ad break real sites. */
+ins.adsbygoogle,
+iframe[id^="google_ads_iframe"],
+div[id^="div-gpt-ad"],
+div[id^="google_ads_"],
+iframe[src*="doubleclick.net"],
+iframe[src*="googlesyndication.com"],
+[data-ad-slot],
+amp-ad,
+amp-embed[type="taboola"],
+[id^="taboola-"],
+.OUTBRAIN {
+  display: none !important;
+}

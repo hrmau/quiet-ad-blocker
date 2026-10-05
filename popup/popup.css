@@ -1,10 +1,12 @@
 :root {
   --base: #e6ebe7;    /* pale sage stone */
   --ink: #2c3833;
-  --muted: #74817a;
+  --muted: #6b7871;
   --rule: #cbd5ce;
   --sage: #5f8572;
-  --mist: rgb(95 133 114 / 0.14);
+  --mist: rgb(95 133 114 / 0.13);
+  --mist-2: rgb(95 133 114 / 0.07);
+  --card: rgb(255 255 255 / 0.45);
   --serif: "Iowan Old Style", "Charter", "Palatino Linotype", Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light dark;
@@ -17,6 +19,8 @@
     --rule: #2e3632;
     --sage: #8fb3a1;
     --mist: rgb(143 179 161 / 0.12);
+    --mist-2: rgb(143 179 161 / 0.06);
+    --card: rgb(255 255 255 / 0.03);
   }
 }
 
@@ -27,7 +31,7 @@ body {
   background: var(--base);
   color: var(--ink);
   font: 13px/1.5 var(--sans);
-  padding: 14px 20px 16px;
+  padding: 14px 18px 16px;
 }
 
 .site { display: flex; align-items: center; gap: 7px; color: var(--muted); overflow: hidden; }
@@ -47,63 +51,90 @@ body {
 .pause:hover { border-color: var(--sage); }
 .pause:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
 .pause:disabled { opacity: 0.5; cursor: default; }
-body.is-paused .breath { animation: none; opacity: 0.4; }
+body.is-paused .breath { animation: none; opacity: 0.35; }
+body.is-paused .count { color: var(--muted); }
 
-/* The one moving thing: a slow breathing circle behind the count (about six breaths a minute). */
+/* The one moving thing: a slow breathing circle behind the count (about six breaths a minute).
+   Two soft rings rather than one flat disc, and big enough to hold the count and its label. */
 .hero {
   position: relative;
   display: grid;
   place-items: center;
-  height: 140px;
-  margin-top: 4px;
+  height: 176px;
+  margin-top: 6px;
   text-align: center;
 }
 .breath {
   position: absolute;
-  width: 112px;
-  height: 112px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: var(--mist);
-  box-shadow: 0 0 0 1px var(--mist);
+  background: radial-gradient(circle, var(--mist) 0 58%, var(--mist-2) 59% 100%);
   animation: breathe 10s ease-in-out infinite;
 }
 @keyframes breathe {
-  0%, 100% { transform: scale(0.86); opacity: 0.7; }
-  50%      { transform: scale(1.08); opacity: 1; }
+  0%, 100% { transform: scale(0.88); opacity: 0.75; }
+  50%      { transform: scale(1.06); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .breath { animation: none; } }
 
 .count {
   position: relative;
   align-self: end;
-  font: 400 44px/1 var(--serif);
+  font: 400 50px/1 var(--serif);
   font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.01em;
   color: var(--sage);
 }
-.count-label { position: relative; align-self: start; margin-top: 6px; color: var(--muted); font-size: 12px; }
+.count-label {
+  position: relative;
+  align-self: start;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
 .quip {
-  margin: 6px 0 0;
+  margin: 4px 6px 0;
   text-align: center;
-  font: italic 14px/1.45 var(--serif);
+  font: italic 14.5px/1.45 var(--serif);
   color: var(--ink);
   text-wrap: balance;
 }
 
 .released { margin-top: 20px; }
-.released h2 { font: inherit; color: var(--muted); margin-bottom: 4px; }
-#list { list-style: none; }
-#list li { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0; }
+.released h2, .eyebrow {
+  font: inherit;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+#list { list-style: none; display: grid; gap: 3px; }
+/* Each row carries a faint bar proportional to its count. Still, not moving. */
+#list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--mist) var(--w, 0%), transparent var(--w, 0%));
+}
 #list .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #list .n { color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .muted { color: var(--muted); }
-#more { margin-top: 2px; }
+#more { margin: 4px 8px 0; font-size: 12px; }
 
-.total { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rule); }
-.total-n { color: var(--sage); font-weight: 600; font-variant-numeric: tabular-nums; }
+.total { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.since { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.total-n { font: 400 22px/1 var(--serif); color: var(--sage); font-variant-numeric: lining-nums tabular-nums; }
+#total-yt { font-size: 12px; margin-top: 2px; text-wrap: pretty; }
 
-.fine { margin-top: 6px; font-size: 11px; color: var(--muted); }
+.fine { margin-top: 10px; font-size: 11px; color: var(--muted); }
 
 /* Achievements: shown once in the popup, never as a notification. */
 .unlocked:empty { display: none; }
@@ -112,13 +143,15 @@ body.is-paused .breath { animation: none; opacity: 0.4; }
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  border: 1px solid var(--sage);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--sage);
   border-radius: 8px;
   padding: 10px 12px;
 }
 .ach img { flex: none; margin-top: 2px; }
 .ach-body { flex: 1; min-width: 0; }
-.ach-eyebrow { font-size: 11px; color: var(--muted); }
+.ach-eyebrow { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .ach-title { font-weight: 600; }
 .ach-quip { font: italic 13px/1.4 var(--serif); }
 .ach-close {
@@ -133,10 +166,23 @@ body.is-paused .breath { animation: none; opacity: 0.4; }
 }
 .ach-close:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
 
-.milestones { margin-top: 8px; }
-.milestones summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+/* Milestones as a string of prayer beads: filled for unlocked, hollow for not yet. */
+.milestones { margin-top: 10px; }
+.milestones summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  list-style: none;
+}
+.milestones summary::-webkit-details-marker { display: none; }
 .milestones summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
-#milestone-list { list-style: none; margin-top: 6px; display: grid; gap: 6px; }
+.beads { display: flex; gap: 4px; }
+.beads i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--sage); opacity: 0.6; }
+.beads i.on { background: var(--sage); opacity: 1; }
+#milestone-list { list-style: none; margin-top: 8px; display: grid; gap: 6px; }
 #milestone-list .done .t { font-weight: 600; }
 #milestone-list .q { font: italic 12px/1.4 var(--serif); color: var(--muted); }
 #milestone-list .todo { color: var(--muted); }

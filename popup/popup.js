@@ -74,8 +74,10 @@ const pageTotal = page.network + page.youtube;
 $('count').textContent = num.format(pageTotal);
 $('quip').textContent = pick(!host ? QUIPS.internal : isPaused ? QUIPS.paused : pageTotal ? QUIPS.some : QUIPS.none);
 
-const rows = Object.entries(page.byBlocked).sort((a, b) => b[1] - a[1]);
-if (page.youtube) rows.unshift(['YouTube ads', page.youtube]);
+const rows = Object.entries(page.byBlocked);
+if (page.youtube) rows.push(['YouTube ads', page.youtube]);
+rows.sort((a, b) => b[1] - a[1]);
+const max = rows[0]?.[1] ?? 1; // each row gets a faint bar relative to the biggest
 
 if (rows.length) {
   for (const [name, n] of rows.slice(0, TOP)) {
@@ -84,6 +86,7 @@ if (rows.length) {
     li.querySelector('.name').textContent = name;
     li.querySelector('.name').title = name;
     li.querySelector('.n').textContent = num.format(n);
+    li.style.setProperty('--w', `${Math.max(4, (n / max) * 100)}%`);
     $('list').append(li);
   }
   if (rows.length > TOP) {
@@ -98,13 +101,15 @@ if (rows.length) {
 $('total').textContent = num.format(totals.network + totals.youtube);
 $('since').textContent = date.format(totals.since);
 if (totals.youtube) {
-  $('total-yt').textContent = `${num.format(totals.youtube)} of them YouTube ads. None were urgent.`;
+  $('total-yt').textContent = `${num.format(totals.youtube)} YouTube ads among them. None were urgent.`;
   $('total-yt').hidden = false;
 }
 
 if (lists) {
   const n = lists.rules ? `${num.format(lists.rules)} rules from ${lists.sources?.length ?? 1} lists` : `${num.format(lists.domains)} domains`;
-  $('lists').textContent = `Blocklist: ${n}, refreshed ${date.format(lists.updated)}`;
+  const days = Math.floor((Date.now() - lists.updated) / 864e5);
+  const ago = days < 1 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
+  $('lists').textContent = `${n} · refreshed ${ago}`;
   $('lists').title = lists.sources?.join(', ') ?? '';
   $('lists').hidden = false;
 }
@@ -138,7 +143,8 @@ if (unseen.length) chrome.runtime.sendMessage({ type: 'seen' });
 
 // Milestones list: unlocked with their line, locked by name only.
 const done = ACHIEVEMENTS.filter((a) => achievements.unlocked[a.id]);
-$('milestones-label').textContent = `Milestones: ${done.length} of ${ACHIEVEMENTS.length}`;
+$('milestones-label').textContent = `${done.length} of ${ACHIEVEMENTS.length} milestones`;
+$('beads').append(...ACHIEVEMENTS.map((_, i) => Object.assign(document.createElement('i'), { className: i < done.length ? 'on' : '' })));
 for (const a of ACHIEVEMENTS) {
   const got = achievements.unlocked[a.id];
   const li = document.createElement('li');

@@ -2,7 +2,10 @@
 
 *An ad blocker for Brave and Chrome. A guided meditation that has read the privacy policy.*
 
-<img src="docs/popup.png" alt="The Quiet popup: 49 blocked on this page, a slow breathing circle, the line 'You are not the product. Today, at least.' and a short list of the trackers it let go of." width="300" align="right">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/popup-dark.png">
+  <img src="docs/popup-light.png" alt="The Quiet popup: 49 blocked on this page inside a softly breathing circle, a dry one-line remark, the trackers it let go of with faint bars for each, 12,877 let go since install, and milestones shown as a string of beads." width="300" align="right">
+</picture>
 
 Settle into a comfortable position. Close your eyes. Not literally, you're reading.
 
@@ -40,7 +43,7 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ## Installing
 
-Quiet isn't on the Chrome Web Store. You load it yourself, which takes about two minutes and one terminal command.
+Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review, a developer account and a version that counts without developer mode are all on the list. Until then, you load it yourself. It takes about two minutes and one terminal command.
 
 You'll need [Node.js](https://nodejs.org) 18 or newer (only to build the fallback list - the extension itself has no dependencies).
 
@@ -74,13 +77,13 @@ git pull
 
 Then press the reload arrow on Quiet's card in `brave://extensions`. Your counts and milestones survive, as long as the folder stays where it is - the browser identifies unpacked extensions by their path, so moving the folder makes it a new extension with a blank slate. Some would call that a fresh start.
 
-Watch or star the repo if you'd like to know when there's something to pull.
+Watch or star the repo if you'd like to know when there's something to pull. Once Quiet is on the Chrome Web Store, code updates will arrive by themselves too, and none of this will be your problem.
 
 ## What it doesn't do
 
 - **Cosmetic filters from the big lists.** uBlock Origin hides thousands of site-specific elements; Quiet hides a handful of generic ones. Some empty boxes will remain where ads used to be. Sit with them.
 - **Every network rule.** Browser-native blocking can't express everything uBlock Origin can (regex rules, redirects, scriptlets, parameter stripping). Those are skipped. Quiet blocks most things, not all things.
-- **Counting outside developer mode.** The per-site counts rely on an API that browsers only allow for unpacked extensions. A Web Store version would need to count differently.
+- **Counting outside developer mode.** The per-site counts rely on an API that browsers only allow for unpacked extensions. The Web Store version will need to count differently, which is the main thing standing between Quiet and the store.
 - **Promises about YouTube.** It works until it doesn't. Then it gets fixed. Then it doesn't.
 
 If you need the full strength version, use [uBlock Origin](https://github.com/gorhill/uBlock) or uBlock Origin Lite. They're excellent. They're just not this sarcastic.

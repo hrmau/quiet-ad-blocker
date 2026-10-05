@@ -40,10 +40,11 @@ YouTube detects blockers and shows the "Ad blockers are not allowed" dialog. Wha
 - Voice: a guided meditation that has read the privacy policy. Dry, deadpan, never shouty. Quips live in `popup/popup.js` and `achievements.js`.
 - Palette: pale sage-stone base `#e6ebe7`, ink `#2c3833`, sage `#5f8572`; dusk dark mode. Serif for the count and quips, system sans for the rest.
 - One motion only: the slow breathing circle behind the count. Respect `prefers-reduced-motion`.
+- Popup: count and label sit inside the circle; "Let go of" rows carry a static bar sized to their count; milestones show as beads (filled = unlocked). Small uppercase eyebrows for section labels.
 - Icon: a closed eye, sage, transparent background. 16/32px use the bolder variant.
 
 ## Known unknowns
-- The popup has never been rendered here - only in Artur's browser. Ask for a screenshot after UI changes.
+- The popup has only been rendered here with a mocked `chrome` API (fake data, no favicon). Ask for a real screenshot after UI changes. README screenshots live in `docs/`.
 - The rule validator in `tests/` is a best-effort copy of Chrome's; real validation may be stricter.
 - Dynamic rule storage size limits beyond the 30,000 rule count haven't been checked.
 

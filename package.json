@@ -2,5 +2,5 @@
   "name": "quiet",
   "private": true,
   "type": "module",
-  "scripts": { "build-rules": "node scripts/build-rules.mjs" }
+  "scripts": { "build-rules": "node scripts/build-rules.mjs", "package": "sh scripts/package.sh" }
 }

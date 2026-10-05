@@ -43,9 +43,21 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ## Installing
 
-Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review, a developer account and a version that counts without developer mode are all on the list. Until then, you load it yourself. It takes about two minutes and one terminal command.
+Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review, a developer account and a version that counts without developer mode are all on the list. Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
 
-You'll need [Node.js](https://nodejs.org) 18 or newer (only to build the fallback list - the extension itself has no dependencies).
+1. **[Download quiet.zip](https://github.com/hrmau/quiet-ad-blocker/releases/latest/download/quiet.zip)** from the latest release.
+2. Unzip it somewhere it can live permanently, like your Documents folder. Not Downloads - you'll tidy that one day and take Quiet with it.
+3. Open `brave://extensions` (or `chrome://extensions`) in the address bar.
+4. Switch on **Developer mode**, top right.
+5. Click **Load unpacked** and choose the `quiet` folder you just unzipped.
+6. Pin the closed eye to your toolbar. Breathe.
+
+Within a minute, it downloads the full blocklists by itself.
+
+<details>
+<summary>Prefer to build it from source?</summary>
+
+You'll need [Node.js](https://nodejs.org) 18 or newer, only to build the bundled fallback list.
 
 ```bash
 git clone https://github.com/hrmau/quiet-ad-blocker.git
@@ -55,29 +67,25 @@ git clone https://github.com/hrmau/quiet-ad-blocker.git
 cd quiet-ad-blocker && npm run build-rules
 ```
 
-Then:
+Then load the `quiet-ad-blocker` folder unpacked, as above.
 
-1. Open `brave://extensions` (or `chrome://extensions`).
-2. Switch on **Developer mode**, top right.
-3. Click **Load unpacked** and choose the `quiet-ad-blocker` folder.
-4. Pin the closed eye to your toolbar. Breathe.
-
-Within a minute of installing, it downloads the full lists by itself.
+</details>
 
 ## Staying up to date
 
 There are two kinds of update, and only one of them needs you.
 
 - **Blocklists update themselves.** Weekly, with no action from you. This is most of what keeps an ad blocker useful.
-- **The extension's own code doesn't.** Unpacked extensions never update automatically. When something changes here, pull it and reload:
+- **The extension's own code doesn't.** Unpacked extensions never update automatically. When there's a new [release](https://github.com/hrmau/quiet-ad-blocker/releases):
+  1. Download the new `quiet.zip` and unzip it.
+  2. Copy its contents over your existing `quiet` folder, replacing the old files.
+  3. Press the reload arrow on Quiet's card in `brave://extensions`.
 
-```bash
-git pull
-```
+  Built from source? `git pull`, then reload.
 
-Then press the reload arrow on Quiet's card in `brave://extensions`. Your counts and milestones survive, as long as the folder stays where it is - the browser identifies unpacked extensions by their path, so moving the folder makes it a new extension with a blank slate. Some would call that a fresh start.
+Your counts and milestones survive, as long as the folder stays where it is. The browser identifies unpacked extensions by their path, so loading the new version from a different folder makes it a new extension with a blank slate. Some would call that a fresh start.
 
-Watch or star the repo if you'd like to know when there's something to pull. Once Quiet is on the Chrome Web Store, code updates will arrive by themselves too, and none of this will be your problem.
+To hear about new versions, choose **Watch → Custom → Releases** at the top of this page. Once Quiet is on the Chrome Web Store, updates will arrive by themselves, and none of this will be your problem.
 
 ## What it doesn't do
 

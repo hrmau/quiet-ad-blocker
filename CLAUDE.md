@@ -9,6 +9,7 @@ A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project b
 
 ## Run it
 - `npm run build-rules` - builds the bundled fallback `rules/ads.json` (gitignored; required before loading unpacked)
+- `npm run package` - builds `dist/quiet.zip` for a GitHub release. Bump `manifest.json` version first. The release asset must be named `quiet.zip` - the README links to `releases/latest/download/quiet.zip`.
 - `npm test` - background logic against a mocked `chrome` API, with real list downloads (needs network)
 - Load: `brave://extensions` -> Developer mode -> Load unpacked. Reload after every change.
 - Debug: the "service worker" link on the extension card opens the background console.

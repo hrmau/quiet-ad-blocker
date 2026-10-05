@@ -4,3 +4,4 @@ node_modules/
 *.zip
 .claude/settings.local.json
 .claude/launch.json
+dist/

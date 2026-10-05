@@ -5,10 +5,9 @@
   "description": "Personal ad blocker: network blocking, cosmetic filtering and YouTube ad handling.",
   "permissions": [
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback",
+    "webRequest",
     "storage",
     "webNavigation",
-    "activeTab",
     "alarms",
     "favicon",
     "scripting"

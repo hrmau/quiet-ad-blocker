@@ -21,7 +21,7 @@ export const SOURCES = [
     url: 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts' },
 ];
 
-// Rule ID ranges. Only IDs below ALLOW_BASE are blocks - the background counts only those.
+// Rule ID ranges: block rules below ALLOW_BASE, allow rules from it.
 export const ALLOW_BASE = 50000;
 export const PAUSE_ID = 100000;
 export const MAX_RULES = 29000; // Chrome guarantees 30,000 static and 30,000 dynamic "safe" rules

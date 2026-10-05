@@ -1,5 +1,5 @@
 import { ENDPOINT, SYNC_MINUTES, INCLUDE_SITES } from './config.js';
-import { SOURCES, ALLOW_BASE, PAUSE_ID, parseAllowlist, buildRules } from './lists.js';
+import { SOURCES, PAUSE_ID, parseAllowlist, buildRules } from './lists.js';
 import { ACHIEVEMENTS } from './achievements.js';
 
 // Data model
@@ -81,11 +81,13 @@ async function flush() {
   }
 }
 
-// Every matched rule. Only fires for unpacked extensions (see README). Allow rules aren't blocks.
-DNR.onRuleMatchedDebug.addListener(({ request, rule }) => {
-  if (rule.ruleId >= ALLOW_BASE) return;
-  record(request.tabId, hostOf(request.initiator), 'network', hostOf(request.url), request.frameId === 0);
-});
+// Every request a blocker cancelled. Works packed (Web Store) and unpacked, unlike onRuleMatchedDebug.
+// ERR_BLOCKED_BY_CLIENT is any extension's block, so another blocker running alongside inflates the count.
+// Brave Shields blocks earlier and never shows up here. Quiet never blocks main_frame; skip others' blocks.
+chrome.webRequest.onErrorOccurred.addListener((d) => {
+  if (d.error !== 'net::ERR_BLOCKED_BY_CLIENT' || d.type === 'main_frame') return;
+  record(d.tabId, hostOf(d.initiator), 'network', hostOf(d.url), d.frameId === 0);
+}, { urls: ['<all_urls>'] });
 
 // --- Achievements ----------------------------------------------------------
 

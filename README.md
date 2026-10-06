@@ -98,7 +98,7 @@ If you need the full strength version, use [uBlock Origin](https://github.com/go
 
 ## Privacy
 
-Quiet keeps its counts in your browser's local storage and sends them nowhere. The only network requests it makes are to download the filter lists from GitHub. There's an optional sync feature for people who run their own server; it's off, and stays off unless you edit `config.js` yourself. Even then, per-site counts are excluded by default, because they're effectively your browsing history.
+Quiet keeps its counts in your browser's local storage and sends them nowhere. The only network requests it makes are to download the filter lists from GitHub. There's an optional sync feature for people who run their own server; it's off, and stays off unless you edit `config.js` yourself. Even then, per-site counts are excluded by default, because they're effectively your browsing history. The full version is in the [privacy policy](PRIVACY.md).
 
 ## For the curious
 

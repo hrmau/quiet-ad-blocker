@@ -43,7 +43,9 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ## Installing
 
-Quiet isn't on the Chrome Web Store yet. It will be, once I find a quiet afternoon - store review and a developer account are all that's left on the list. Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
+> **Chrome Web Store: pending review.** Quiet has been submitted and is sitting with Google's reviewers, who are reading its permissions with the calm suspicion they deserve. The link will appear here once it passes.
+
+Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
 
 1. **[Download quiet.zip](https://github.com/hrmau/quiet-ad-blocker/releases/latest/download/quiet.zip)** from the latest release.
 2. Unzip it somewhere it can live permanently, like your Documents folder. Not Downloads - you'll tidy that one day and take Quiet with it.
@@ -85,7 +87,7 @@ There are two kinds of update, and only one of them needs you.
 
 Your counts and milestones survive, as long as the folder stays where it is. The browser identifies unpacked extensions by their path, so loading the new version from a different folder makes it a new extension with a blank slate. Some would call that a fresh start.
 
-To hear about new versions, choose **Watch → Custom → Releases** at the top of this page. Once Quiet is on the Chrome Web Store, updates will arrive by themselves, and none of this will be your problem.
+To hear about new versions, choose **Watch → Custom → Releases** at the top of this page. Once Quiet passes review on the Chrome Web Store, installing it from there means updates arrive by themselves, and none of this will be your problem.
 
 ## What it doesn't do
 

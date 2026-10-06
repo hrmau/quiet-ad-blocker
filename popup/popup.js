@@ -1,4 +1,4 @@
-import { ACHIEVEMENTS } from '../achievements.js';
+import { CATEGORIES, TOTAL, progress, formatN } from '../achievements.js';
 
 const $ = (id) => document.getElementById(id);
 const num = new Intl.NumberFormat('en-GB');
@@ -123,11 +123,13 @@ for (const a of unseen.slice(-MAX_CARDS).reverse()) {
   card.innerHTML = `
     <img src="../icons/icon32.png" width="18" height="18" alt="">
     <div class="ach-body">
-      <p class="ach-eyebrow">Milestone reached</p>
+      <p class="ach-eyebrow"></p>
       <p class="ach-title"></p>
       <p class="ach-quip"></p>
     </div>
     <button class="ach-close" type="button" aria-label="Dismiss">&times;</button>`;
+  const cat = CATEGORIES.find((c) => a.id.startsWith(`${c.id}-`));
+  card.querySelector('.ach-eyebrow').textContent = cat ? `Milestone · ${cat.name}` : 'Milestone reached';
   card.querySelector('.ach-title').textContent = a.title;
   card.querySelector('.ach-quip').textContent = a.quip;
   card.querySelector('.ach-close').onclick = () => card.remove();
@@ -141,21 +143,35 @@ if (unseen.length > MAX_CARDS) {
 }
 if (unseen.length) chrome.runtime.sendMessage({ type: 'seen' });
 
-// Milestones list: unlocked with their line, locked by name only.
-const done = ACHIEVEMENTS.filter((a) => achievements.unlocked[a.id]);
-$('milestones-label').textContent = `${done.length} of ${ACHIEVEMENTS.length} milestones`;
-$('beads').append(...ACHIEVEMENTS.map((_, i) => Object.assign(document.createElement('i'), { className: i < done.length ? 'on' : '' })));
-for (const a of ACHIEVEMENTS) {
-  const got = achievements.unlocked[a.id];
-  const li = document.createElement('li');
-  if (got) {
-    li.className = 'done';
-    li.innerHTML = '<span class="t"></span><br><span class="q"></span>';
-    li.querySelector('.t').textContent = got.title;
-    li.querySelector('.q').textContent = got.quip;
-  } else {
-    li.className = 'todo';
-    li.textContent = `${a.locked} - not yet`;
+// Milestones: one expandable row per category - beads for its tiers, a bar towards the next one.
+// Inside, unlocked tiers show their line; the next shows how far off it is; the rest stay unexplained.
+const el = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
+const bar = (frac) => { const b = el('span', 'bar'); b.append(el('i')); b.firstChild.style.width = `${Math.round(frac * 100)}%`; return b; };
+const state = { totals, now: Date.now() };
+const short = (n) => (n >= 1e6 ? `${+(n / 1e6).toFixed(1)}m` : n >= 1e4 ? `${Math.floor(n / 1e3)}k` : formatN(n));
+
+let unlockedCount = 0;
+for (const cat of CATEGORIES) {
+  const p = progress(cat, state, achievements.unlocked);
+  unlockedCount += p.done;
+  const row = el('details', 'cat');
+  const sum = el('summary');
+  const beads = el('span', 'beads');
+  beads.setAttribute('aria-hidden', 'true');
+  for (let i = 0; i < p.count; i++) beads.append(el('i', i < p.done ? 'on' : ''));
+  const where = p.next == null ? 'Complete. Now what.' : `${short(p.n)} / ${short(p.next)}${cat.unit ? ` ${cat.unit}` : ''}`;
+  sum.append(el('span', 'cat-name', cat.name), el('span', 'cat-n', where), bar(p.frac), beads);
+  sum.setAttribute('aria-label', `${cat.name}: ${p.done} of ${p.count}, ${where}`);
+  const list = el('ul', 'tiers');
+  for (const t of p.tiers) {
+    const li = el('li', t.state);
+    li.append(el('span', 't', t.title));
+    if (t.state === 'done') li.append(el('span', 'q', t.quip));
+    if (t.state === 'next') li.append(el('span', 'togo', ` · ${formatN(t.toGo)} to go`));
+    list.append(li);
   }
-  $('milestone-list').append(li);
+  row.append(sum, list);
+  $('cats').append(row);
 }
+$('milestones-label').textContent = `${unlockedCount} of ${TOTAL} milestones`;
+$('milestones-bar').replaceWith(bar(unlockedCount / TOTAL));

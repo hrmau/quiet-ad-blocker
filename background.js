@@ -1,10 +1,11 @@
 import { ENDPOINT, SYNC_MINUTES, INCLUDE_SITES } from './config.js';
 import { SOURCES, PAUSE_ID, parseAllowlist, buildRules } from './lists.js';
-import { ACHIEVEMENTS } from './achievements.js';
+import { LEGACY, newlyReached } from './achievements.js';
 
 // Data model
 //   storage.session  tab:<id>     = { network, youtube, byBlocked: {host: n}, site }  - current page
-//   storage.local    totals       = { since, network, youtube, byBlocked, bySite }   - since install
+//   storage.local    totals       = { since, network, youtube, byBlocked, bySite,    - since install
+//                                    bestPage: { n, site }, pauses, opens }       (last three: milestones)
 //                    paused       = [host, ...]
 //                    lists        = { updated, rules, domains, sources: [name] }
 //                    achievements = { unlocked: { id: { at, title, quip } }, unseen: [id] }
@@ -21,7 +22,9 @@ const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); 
 const bump = (obj, key, n = 1) => { if (key) obj[key] = (obj[key] || 0) + n; };
 const merge = (into, from) => { for (const [k, n] of Object.entries(from)) bump(into, k, n); };
 const emptyPage = () => ({ network: 0, youtube: 0, byBlocked: {}, site: null });
-const emptyTotals = () => ({ since: Date.now(), network: 0, youtube: 0, byBlocked: {}, bySite: {} });
+const emptyTotals = () => ({
+  since: Date.now(), network: 0, youtube: 0, byBlocked: {}, bySite: {}, bestPage: { n: 0, site: null }, pauses: 0, opens: 0,
+});
 const badge = (n) => (n === 0 ? '' : n < 1000 ? String(n) : `${Math.floor(n / 1000)}k`);
 
 // All storage and rule writes go through one queue so read-modify-write cycles never overlap.
@@ -76,8 +79,9 @@ async function flush() {
     totals.youtube += add.youtube;
     merge(totals.byBlocked, add.byBlocked);
     merge(totals.bySite, add.bySite);
+    for (const p of pages) if (p.total > (totals.bestPage?.n ?? 0)) totals.bestPage = { n: p.total, site: p.site };
     await chrome.storage.local.set({ totals });
-    await checkAchievements({ totals, pages });
+    await checkAchievements(totals);
   }
 }
 
@@ -91,33 +95,33 @@ chrome.webRequest.onErrorOccurred.addListener((d) => {
 
 // --- Achievements ----------------------------------------------------------
 
-async function checkAchievements({ totals, pages = [], paused }) {
-  const store = await chrome.storage.local.get(['achievements', 'paused', 'totals']);
+// Milestones are grouped in categories with tiers (achievements.js). Ids from before the categories are
+// migrated. When several tiers of one category unlock at once - an upgrade, a busy page - only the highest
+// is announced in the popup; the rest are unlocked quietly.
+async function checkAchievements(totals) {
+  const store = await chrome.storage.local.get(['achievements', 'totals', 'paused']);
   const ach = store.achievements ?? { unlocked: {}, unseen: [] };
-  const base = {
-    totals: totals ?? store.totals ?? emptyTotals(),
-    paused: paused ?? (store.paused ?? []).length,
-  };
-  const states = pages.length ? pages.map((page) => ({ ...base, page })) : [base];
-
   let changed = false;
-  for (const a of ACHIEVEMENTS) {
-    if (ach.unlocked[a.id]) continue;
-    for (const s of states) {
-      const hit = a.test(s);
-      if (!hit) continue;
-      const p = typeof hit === 'object' ? hit : {};
-      ach.unlocked[a.id] = { at: Date.now(), title: a.title(p), quip: a.quip(p) };
-      ach.unseen.push(a.id);
-      changed = true;
-      break;
-    }
+  for (const [old, now] of Object.entries(LEGACY)) {
+    if (!ach.unlocked[old]) continue;
+    ach.unlocked[now] ??= ach.unlocked[old];
+    delete ach.unlocked[old];
+    changed = true;
   }
-  if (changed) {
-    await chrome.storage.local.set({ achievements: ach });
-    chrome.action.setIcon({ path: ICON_DOT }).catch(() => {});
-  }
+  ach.unseen = ach.unseen.map((id) => LEGACY[id] ?? id);
+
+  const state = { totals: withPauses(totals ?? store.totals ?? emptyTotals(), store.paused), now: Date.now() };
+  const fresh = newlyReached(state, ach.unlocked);
+  for (const a of fresh) ach.unlocked[a.id] = { at: Date.now(), title: a.title, quip: a.quip };
+  const highest = new Map(fresh.map((a) => [a.cat, a.id])); // ascending within a category, so the last one wins
+  ach.unseen.push(...highest.values());
+
+  if (changed || fresh.length) await chrome.storage.local.set({ achievements: ach });
+  if (fresh.length) chrome.action.setIcon({ path: ICON_DOT }).catch(() => {});
 }
+
+// Installs from before lifetime pauses were counted start from the number of sites paused now.
+const withPauses = (totals, paused = []) => ({ ...totals, pauses: totals.pauses ?? paused.length });
 
 async function markSeen() {
   const { achievements: ach } = await chrome.storage.local.get('achievements');
@@ -164,7 +168,12 @@ async function setPaused(host, on) {
   const next = on ? [...new Set([...paused, host])] : paused.filter((h) => h !== host);
   await chrome.storage.local.set({ paused: next.sort() });
   await applyPaused();
-  if (on) await checkAchievements({ paused: next.length });
+  if (on) {
+    const { totals = emptyTotals() } = await chrome.storage.local.get('totals');
+    totals.pauses = (totals.pauses ?? paused.length) + 1;
+    await chrome.storage.local.set({ totals });
+    await checkAchievements(totals);
+  }
 }
 
 // --- Self-updating filter lists --------------------------------------------
@@ -230,6 +239,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === 'stats') {
     serial(async () => {
       await flush();
+      // Opening the popup is a check-in. Count it, and catch time-based milestones (days) here too.
+      const { totals: t = emptyTotals() } = await chrome.storage.local.get('totals');
+      t.opens = (t.opens ?? 0) + 1;
+      await chrome.storage.local.set({ totals: t });
+      await checkAchievements(t);
       const key = `tab:${msg.tabId}`;
       const [s, l] = await Promise.all([
         chrome.storage.session.get(key),
@@ -237,7 +251,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       ]);
       sendResponse({
         page: s[key] ?? emptyPage(),
-        totals: l.totals ?? emptyTotals(),
+        totals: withPauses(l.totals ?? emptyTotals(), l.paused),
         paused: l.paused ?? [],
         lists: l.lists ?? null,
         achievements: l.achievements ?? { unlocked: {}, unseen: [] },
@@ -288,7 +302,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
     await applyPaused();
     await reconcileRulesets();
     await refreshListsOrRetry();   // also upgrades older installs to the full list set
-    await checkAchievements({});   // existing totals may already qualify
+    await checkAchievements();     // existing totals may already qualify
     await restoreIcon();
   });
 });

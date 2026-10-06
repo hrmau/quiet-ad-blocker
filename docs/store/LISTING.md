@@ -30,7 +30,7 @@ Everything the developer dashboard asks for, ready to paste. Images are in this 
 > • Handles YouTube ads: removes them where it can, and mutes and skips the ones that slip through.
 > • "Pause here" turns everything off for one site and reloads it. Acceptance is also a practice.
 > • Shows what was blocked on the current page, what you've let go of since install, and which domains tried hardest.
-> • Dry anti-achievements, shown once in the popup. No notifications.
+> • Thirty-four dry anti-achievements in eight categories, with quiet progress bars. Shown once in the popup. No notifications.
 >
 > WHAT IT DOESN'T DO
 > • Collect, sell or send your data. Counts stay on your device. No analytics, no accounts.

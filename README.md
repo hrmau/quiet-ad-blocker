@@ -4,7 +4,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/popup-dark.png">
-  <img src="docs/popup-light.png" alt="The Quiet popup: 49 blocked on this page inside a softly breathing circle, a dry one-line remark, the trackers it let go of with faint bars for each, 12,877 let go since install, and milestones shown as a string of beads." width="300" align="right">
+  <img src="docs/popup-light.png" alt="The Quiet popup: 49 blocked on this page inside a softly breathing circle, a dry one-line remark, the trackers it let go of with faint bars for each, 12,877 let go since install, and a quiet progress bar for milestones." width="300" align="right">
 </picture>
 
 Settle into a comfortable position. Close your eyes. Not literally, you're reading.
@@ -37,7 +37,7 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 **Counting.** The popup shows what was blocked on this page, what you've let go of since install, and which domains tried hardest. Everything stays on your device.
 
-**Milestones.** Dry anti-achievements, unlocked quietly. A small dot appears on the icon; the popup tells you once. There are no notifications, because an ad blocker asking for notification permission is the start of a different kind of story.
+**Milestones.** Thirty-four dry anti-achievements in eight categories: letting go, YouTube, bad neighbourhoods (the most blocked on one page), compromise (pausing), everywhere, the persistent ones, practice and checking in. Each category is a string of beads with a bar towards the next one. When you reach one, a small dot appears on the icon and the popup tells you once. There are no notifications, because an ad blocker asking for notification permission is the start of a different kind of story.
 
 > *1,000 blocked. You have achieved nothing. Correctly.*
 

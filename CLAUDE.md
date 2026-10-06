@@ -9,7 +9,8 @@ A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project b
 
 ## Run it
 - `npm run build-rules` - builds the bundled fallback `rules/ads.json` (gitignored; required before loading unpacked)
-- `npm run package` - builds `dist/quiet.zip` for a GitHub release. Bump `manifest.json` version first. The release asset must be named `quiet.zip` - the README links to `releases/latest/download/quiet.zip`.
+- `npm run package` - builds `dist/quiet.zip` (GitHub release, `quiet/` folder inside) and `dist/quiet-store.zip` (Chrome Web Store, manifest at the zip root). Bump `manifest.json` version first. The release asset must be named `quiet.zip` - the README links to `releases/latest/download/quiet.zip`.
+- Store listing copy, permission justifications and images: `docs/store/`. Privacy policy: `PRIVACY.md` (linked from the store listing - keep it accurate when data handling changes).
 - `npm test` - background logic against a mocked `chrome` API, with real list downloads (needs network)
 - Load: `brave://extensions` -> Developer mode -> Load unpacked. Reload after every change.
 - Debug: the "service worker" link on the extension card opens the background console.
@@ -17,7 +18,7 @@ A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project b
 ## Layout
 - `background.js` - counting, badge, pause, list refresh, milestones, optional server sync. Module service worker.
 - `lists.js` - list sources + ABP-to-DNR converter. Shared by the extension and `scripts/build-rules.mjs`.
-- `achievements.js` - milestone definitions, shared by background and popup.
+- `achievements.js` - milestone categories and tiers, shared by background and popup.
 - `popup/` - toolbar popup. `content/` - cosmetic CSS and YouTube scripts. `icons/` - closed-eye icon, plus `-dot` variants.
 - `config.js` - server sync (off by default). `allowlist.txt` - domains never blocked.
 
@@ -27,7 +28,7 @@ A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project b
 - **Content scripts** are registered at runtime with `chrome.scripting` (not in the manifest) so paused sites can be excluded via `excludeMatches`.
 - **Pause per site**: one dynamic allow rule with all paused domains + content scripts re-registered. Popup reloads the tab.
 - **Stats**: `webRequest.onErrorOccurred` with `net::ERR_BLOCKED_BY_CLIENT` (observe-only, works packed - `onRuleMatchedDebug` and the `declarativeNetRequestFeedback` permission are gone). Counts any extension's blocks, so another blocker alongside inflates them. Buffered in memory, flushed every 750ms through a single serial queue. Per-page in `storage.session` (reset on top-frame navigation), totals in `storage.local`.
-- **Milestones**: checked after each flush and after pausing. New ones go into `unseen`, the toolbar icon switches to the dot variant, the popup shows them once then sends `seen`. No notifications - deliberate, notification permissions look dodgy.
+- **Milestones**: 8 categories of tiers in `achievements.js` (blocked, YouTube, most on one page, lifetime pauses, sites, top domain, days installed, popup opens). Ids are `<category>-<short tier>` (`blocked-1k`); old flat ids are migrated via `LEGACY` - never rename an id. Extra totals: `bestPage`, `pauses`, `opens`. Checked after each flush, after pausing and on every popup open (which counts as a check-in and catches the days tiers). New ones go into `unseen` - only the highest new tier per category, so upgrades don't flood the popup. The toolbar icon switches to the dot variant, the popup shows them once then sends `seen`. No notifications - deliberate, notification permissions look dodgy.
 
 ## YouTube - lessons learned
 YouTube detects blockers and shows the "Ad blockers are not allowed" dialog. What we learned from uBO's live filters:
@@ -41,7 +42,7 @@ YouTube detects blockers and shows the "Ad blockers are not allowed" dialog. Wha
 - Voice: a guided meditation that has read the privacy policy. Dry, deadpan, never shouty. Quips live in `popup/popup.js` and `achievements.js`.
 - Palette: pale sage-stone base `#e6ebe7`, ink `#2c3833`, sage `#5f8572`; dusk dark mode. Serif for the count and quips, system sans for the rest.
 - One motion only: the slow breathing circle behind the count. Respect `prefers-reduced-motion`.
-- Popup: count and label sit inside the circle; "Let go of" rows carry a static bar sized to their count; milestones show as beads (filled = unlocked). Small uppercase eyebrows for section labels.
+- Popup: count and label sit inside the circle; "Let go of" rows carry a static bar sized to their count; milestones are expandable category rows, each with beads (filled = unlocked) and a static bar towards the next tier. Small uppercase eyebrows for section labels.
 - Icon: a closed eye, sage, transparent background. 16/32px use the bolder variant.
 
 ## Known unknowns

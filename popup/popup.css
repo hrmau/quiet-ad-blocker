@@ -166,9 +166,9 @@ body.is-paused .count { color: var(--muted); }
 }
 .ach-close:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
 
-/* Milestones as a string of prayer beads: filled for unlocked, hollow for not yet. */
-.milestones { margin-top: 10px; }
-.milestones summary {
+/* Milestones: categories of tiers. Beads per category (filled = unlocked), a static bar towards the next tier. */
+.milestones { margin-top: 12px; }
+.milestones > summary {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -178,11 +178,42 @@ body.is-paused .count { color: var(--muted); }
   list-style: none;
 }
 .milestones summary::-webkit-details-marker { display: none; }
-.milestones summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+.milestones summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; border-radius: 4px; }
+.milestones > summary::after, .cat > summary::after { content: '+'; color: var(--muted); font-size: 13px; line-height: 1; }
+.milestones[open] > summary::after, .cat[open] > summary::after { content: '\2212'; }
+.milestones > summary .bar { flex: 1; }
+
+.bar { display: block; height: 3px; border-radius: 2px; background: var(--rule); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--sage); border-radius: 2px; }
+
+.cats { margin-top: 10px; display: grid; gap: 2px; }
+.cat > summary {
+  display: grid;
+  grid-template-columns: 1fr 62px 10px; /* beads column fits the longest category, so every bar is equal */
+  grid-template-areas: "name n sign" "bar beads sign";
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 5px;
+  padding: 7px 0;
+  cursor: pointer;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.cat > summary::after { grid-area: sign; justify-self: end; align-self: center; }
+.cat-name { grid-area: name; font-size: 12.5px; color: var(--ink); }
+.cat .beads { grid-area: beads; justify-self: end; }
+.cat .bar { grid-area: bar; }
+.cat-n { grid-area: n; justify-self: end; margin-left: -60px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
 .beads { display: flex; gap: 4px; }
-.beads i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--sage); opacity: 0.6; }
+.beads i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--sage); opacity: 0.55; }
 .beads i.on { background: var(--sage); opacity: 1; }
-#milestone-list { list-style: none; margin-top: 8px; display: grid; gap: 6px; }
-#milestone-list .done .t { font-weight: 600; }
-#milestone-list .q { font: italic 12px/1.4 var(--serif); color: var(--muted); }
-#milestone-list .todo { color: var(--muted); }
+
+.tiers { list-style: none; display: grid; gap: 7px; padding: 2px 0 10px 10px; border-left: 2px solid var(--mist); margin-left: 2px; }
+.tiers li { display: grid; font-size: 12px; }
+.tiers .done .t { font-weight: 600; }
+.tiers .q { font: italic 12px/1.4 var(--serif); color: var(--muted); }
+.tiers .next .t { color: var(--ink); }
+.tiers .next { display: block; }
+.tiers .togo, .tiers .later { color: var(--muted); }
+.tiers .later { opacity: 0.7; }

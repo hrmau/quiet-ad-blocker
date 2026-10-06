@@ -37,7 +37,7 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 **Counting.** The popup shows what was blocked on this page, what you've let go of since install, and which domains tried hardest. Everything stays on your device.
 
-**Milestones.** Thirty-four dry anti-achievements in eight categories: letting go, YouTube, bad neighbourhoods (the most blocked on one page), compromise (pausing), everywhere, the persistent ones, practice and checking in. Each category is a string of beads with a bar towards the next one. When you reach one, a small dot appears on the icon and the popup tells you once. There are no notifications, because an ad blocker asking for notification permission is the start of a different kind of story.
+**Milestones.** Thirty-five dry anti-achievements in eight categories: letting go, YouTube, bad neighbourhoods (the most blocked on one page), compromise (pausing), everywhere (websites visited), the persistent ones, practice and checking in. Each category is a string of beads with a bar towards the next one. When you reach one, a small dot appears on the icon and the popup tells you once. There are no notifications, because an ad blocker asking for notification permission is the start of a different kind of story.
 
 > *1,000 blocked. You have achieved nothing. Correctly.*
 

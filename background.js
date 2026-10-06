@@ -36,13 +36,14 @@ const serial = (fn) => (queue = queue.then(fn).catch((e) => console.error('[quie
 let pending = { tabs: new Map(), totals: emptyTotals() };
 let timer = null;
 
-function record(tabId, site, kind, blockedHost, isTopFrame = false) {
+// site = the host in the tab's address bar, so blocks inside ad iframes still count for the page you're on.
+function record(tabId, site, kind, blockedHost) {
   if (tabId >= 0) {
     if (!pending.tabs.has(tabId)) pending.tabs.set(tabId, emptyPage());
     const t = pending.tabs.get(tabId);
     t[kind]++;
     bump(t.byBlocked, blockedHost);
-    if (isTopFrame && site) t.site = site;
+    if (site) t.site = site;
   }
   const T = pending.totals;
   T[kind]++;
@@ -90,8 +91,17 @@ async function flush() {
 // Brave Shields blocks earlier and never shows up here. Quiet never blocks main_frame; skip others' blocks.
 chrome.webRequest.onErrorOccurred.addListener((d) => {
   if (d.error !== 'net::ERR_BLOCKED_BY_CLIENT' || d.type === 'main_frame') return;
-  record(d.tabId, hostOf(d.initiator), 'network', hostOf(d.url), d.frameId === 0);
+  const count = (site) => record(d.tabId, site, 'network', hostOf(d.url));
+  if (d.tabId < 0) return count(hostOf(d.initiator)); // not from a tab, e.g. a service worker
+  if (tabSite.has(d.tabId)) return count(tabSite.get(d.tabId));
+  // The worker restarted since this tab navigated: ask the tab, fall back to the initiator.
+  chrome.tabs.get(d.tabId)
+    .then((tab) => { tabSite.set(d.tabId, hostOf(tab.url)); count(tabSite.get(d.tabId)); })
+    .catch(() => count(hostOf(d.initiator)));
 }, { urls: ['<all_urls>'] });
+
+// tabId -> address bar host. In memory only; refilled from chrome.tabs after a worker restart.
+const tabSite = new Map();
 
 // --- Achievements ----------------------------------------------------------
 
@@ -233,7 +243,7 @@ async function reconcileRulesets() {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === 'yt' && sender.tab) {
-    record(sender.tab.id, hostOf(sender.url), 'youtube', null, sender.frameId === 0);
+    record(sender.tab.id, hostOf(sender.tab.url ?? sender.url), 'youtube', null);
     return;
   }
   if (msg?.type === 'stats') {
@@ -274,8 +284,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 // --- Tab lifecycle ---------------------------------------------------------
 
-chrome.webNavigation.onCommitted.addListener(({ tabId, frameId }) => {
+chrome.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
   if (frameId !== 0) return;
+  tabSite.set(tabId, hostOf(url));
   pending.tabs.delete(tabId);
   serial(async () => {
     await chrome.storage.session.remove(`tab:${tabId}`);
@@ -284,6 +295,7 @@ chrome.webNavigation.onCommitted.addListener(({ tabId, frameId }) => {
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
+  tabSite.delete(tabId);
   pending.tabs.delete(tabId);
   serial(() => chrome.storage.session.remove(`tab:${tabId}`));
 });

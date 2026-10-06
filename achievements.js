@@ -64,6 +64,7 @@ export const CATEGORIES = [
       10: 'Ten sites in, and every one of them was watching.',
       100: 'Everywhere you go, someone is watching. Not today.',
       1000: 'A thousand sites. The internet is mostly surveillance with articles attached.',
+      5000: 'Five thousand sites. You have seen the internet. It has seen rather less of you.',
     },
   },
   {

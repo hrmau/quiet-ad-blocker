@@ -15,7 +15,7 @@ Then block them.
 
 Quiet is a small Manifest V3 extension that removes ads and trackers, counts what it has let go of, and offers a dry remark about it. It will not lecture you, notify you or ask for a rating. It has one animation, a circle that breathes six times a minute, and it is very proud of it.
 
-**[Add Quiet to Chrome or Brave](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk)** from the Chrome Web Store.
+<a href="https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk"><img src="docs/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" height="58"></a>
 
 <br clear="right">
 
@@ -25,7 +25,7 @@ I had never written a browser extension. I wanted to find out whether the claim 
 
 So this is the experiment. Quiet was built almost entirely in conversation with an AI (Claude), by someone who had never built a browser extension before. It blocks real ads, mostly survives YouTube, and it is exactly as sarcastic as I wanted it to be. Nobody else's product roadmap was consulted.
 
-If it works for you too, lovely. If you'd rather have your own, that's rather the point - fork it, or better, make yours from scratch and tell me how it went.
+If it works for you too, lovely. If you'd rather have your own, that's rather the point - fork it, or better, make yours from scratch and tell me how it went. A star on this repo is the cheapest way to say the experiment worked.
 
 ## The practice
 
@@ -47,7 +47,9 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ### From the Chrome Web Store
 
-**[Get Quiet from the Chrome Web Store](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk)** and click **Add to Chrome**. It works in Brave too - Brave installs Chrome Web Store extensions as they are. Pin the closed eye to your toolbar. Breathe.
+<a href="https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk"><img src="docs/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" height="58"></a>
+
+Click **Add to Chrome**. It works in Brave too - Brave installs Chrome Web Store extensions as they are. Pin the closed eye to your toolbar. Breathe.
 
 Google's reviewers read its permissions with the calm suspicion they deserve, and let it through. It updates itself from then on.
 
@@ -122,6 +124,16 @@ Quiet keeps its counts in your browser's local storage and sends them nowhere. T
 | `config.js` | Optional server sync, off by default |
 
 Something broken? Click **service worker** on the extension card for the background console, or open an issue. Describe it calmly.
+
+## If Quiet has spared you something
+
+[![GitHub stars](https://img.shields.io/github/stars/hrmau/quiet-ad-blocker?style=social)](https://github.com/hrmau/quiet-ad-blocker/stargazers)
+
+Consider giving it a star. Top right of this page.
+
+It is the only attention Quiet is interested in. No tracking pixel will record that you did it, no retargeting campaign will follow you around the internet asking why you didn't. Just a small number going up by one, somewhere, quietly. Very on brand.
+
+Or [leave a review on the Chrome Web Store](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk/reviews), where other people deciding whether to trust an ad blocker will read it. Calm, honest, one to five stars. We will practise acceptance either way. (The extension itself will never ask. This is the README, which has fewer principles.)
 
 ## Credits
 

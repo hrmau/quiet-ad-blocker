@@ -1,6 +1,6 @@
 # Quiet - handover
 
-A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project by Artur, loaded unpacked in Brave on macOS. Public repo, MIT.
+A calm, slightly cynical MV3 ad blocker for Brave and Chrome. Personal project by Artur, loaded unpacked in Brave on macOS. Public repo, MIT. Published on the [Chrome Web Store](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk) (0.9.0, Oct 2026) - store updates need a higher `manifest.json` version and an upload of `dist/quiet-store.zip`.
 
 ## Working with Artur
 - British English. Never use em dashes - use spaced hyphens.

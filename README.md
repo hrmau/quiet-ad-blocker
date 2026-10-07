@@ -15,6 +15,8 @@ Then block them.
 
 Quiet is a small Manifest V3 extension that removes ads and trackers, counts what it has let go of, and offers a dry remark about it. It will not lecture you, notify you or ask for a rating. It has one animation, a circle that breathes six times a minute, and it is very proud of it.
 
+**[Add Quiet to Chrome or Brave](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk)** from the Chrome Web Store.
+
 <br clear="right">
 
 ## Why I made this
@@ -43,9 +45,17 @@ If it works for you too, lovely. If you'd rather have your own, that's rather th
 
 ## Installing
 
-> **Chrome Web Store: pending review.** Quiet has been submitted and is sitting with Google's reviewers, who are reading its permissions with the calm suspicion they deserve. The link will appear here once it passes.
+### From the Chrome Web Store
 
-Until then, you load it yourself. It takes about two minutes. No terminal, no judgement.
+**[Get Quiet from the Chrome Web Store](https://chromewebstore.google.com/detail/quiet/ophfnceodljnodmncbjdechhmokandmk)** and click **Add to Chrome**. It works in Brave too - Brave installs Chrome Web Store extensions as they are. Pin the closed eye to your toolbar. Breathe.
+
+Google's reviewers read its permissions with the calm suspicion they deserve, and let it through. It updates itself from then on.
+
+Within a minute, it downloads the full blocklists by itself.
+
+### By hand
+
+For the developer-minded, or anyone who'd rather not involve a store. It takes about two minutes. No terminal, no judgement.
 
 1. **[Download quiet.zip](https://github.com/hrmau/quiet-ad-blocker/releases/latest/download/quiet.zip)** from the latest release.
 2. Unzip it somewhere it can live permanently, like your Documents folder. Not Downloads - you'll tidy that one day and take Quiet with it.
@@ -53,8 +63,6 @@ Until then, you load it yourself. It takes about two minutes. No terminal, no ju
 4. Switch on **Developer mode**, top right.
 5. Click **Load unpacked** and choose the `quiet` folder you just unzipped.
 6. Pin the closed eye to your toolbar. Breathe.
-
-Within a minute, it downloads the full blocklists by itself.
 
 <details>
 <summary>Prefer to build it from source?</summary>
@@ -75,19 +83,18 @@ Then load the `quiet-ad-blocker` folder unpacked, as above.
 
 ## Staying up to date
 
-There are two kinds of update, and only one of them needs you.
-
-- **Blocklists update themselves.** Weekly, with no action from you. This is most of what keeps an ad blocker useful.
-- **The extension's own code doesn't.** Unpacked extensions never update automatically. When there's a new [release](https://github.com/hrmau/quiet-ad-blocker/releases):
+- **Blocklists update themselves.** Weekly, with no action from you, however you installed Quiet. This is most of what keeps an ad blocker useful.
+- **From the Chrome Web Store?** The extension updates itself too. Nothing to do. Enjoy it.
+- **Loaded by hand?** Unpacked extensions never update automatically. When there's a new [release](https://github.com/hrmau/quiet-ad-blocker/releases):
   1. Download the new `quiet.zip` and unzip it.
   2. Copy its contents over your existing `quiet` folder, replacing the old files.
   3. Press the reload arrow on Quiet's card in `brave://extensions`.
 
   Built from source? `git pull`, then reload.
 
-Your counts and milestones survive, as long as the folder stays where it is. The browser identifies unpacked extensions by their path, so loading the new version from a different folder makes it a new extension with a blank slate. Some would call that a fresh start.
+  Your counts and milestones survive, as long as the folder stays where it is. The browser identifies unpacked extensions by their path, so loading the new version from a different folder makes it a new extension with a blank slate. Some would call that a fresh start. To hear about new versions, choose **Watch → Custom → Releases** at the top of this page.
 
-To hear about new versions, choose **Watch → Custom → Releases** at the top of this page. Once Quiet passes review on the Chrome Web Store, installing it from there means updates arrive by themselves, and none of this will be your problem.
+**Moving from the hand-loaded version to the store one?** They're separate extensions to the browser, so your counts and milestones start again from nothing. Remove the old one in `brave://extensions` once the new one is in - with both running, each counts the other's blocks and you'll feel twice as protected as you are.
 
 ## What it doesn't do
 
